@@ -19,8 +19,9 @@ cmake ..
 echo "Building the project..."
 make -j$(nproc)
 
+
 echo "Build completed!"
 echo ""
 echo "To run the application:"
-echo "  cd build/sprayer"
-echo "  ./sprayer"
+echo "  build/examples/seeder_example"
+echo "  ./SeederExample"

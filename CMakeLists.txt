@@ -75,9 +75,6 @@ if(BUILD_EXAMPLES)
   add_subdirectory("examples/seeder_example")
 endif()
 
-# Add sprayer application
-add_subdirectory("sprayer_application")
-
 if(BUILD_TESTING)
   add_subdirectory("test")
 endif()
