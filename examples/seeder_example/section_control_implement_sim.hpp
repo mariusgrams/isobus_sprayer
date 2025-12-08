@@ -106,8 +106,7 @@ public:
 	};
 
 	/// @brief Constructor for the simulator
-	/// @param[in] value The number of sections to track for section control
-	explicit SectionControlImplementSimulator(std::uint8_t value);
+	SectionControlImplementSimulator();
 
 	/// @brief Returns the number of sections that the sim is configured for
 	/// @returns The number of sections the sim is configured for
@@ -161,11 +160,10 @@ public:
 	/// @returns The current section control state
 	std::uint32_t get_section_control_state() const;
 
-	/// @brief Generates a DDOP to send to the TC
-	/// @param[in] poolToPopulate A pointer to the DDOP that will be populated
-	/// @param[in] clientName The ISO NAME to generate the DDOP for
-	/// @returns true if the DDOP was successfully created, otherwise false
-	bool create_ddop(std::shared_ptr<isobus::DeviceDescriptorObjectPool> poolToPopulate, isobus::NAME clientName) const;
+	/// @brief Initializes the simulator from a DDOP
+	/// @param[in] ddop The DDOP to analyze for section count and structure
+	/// @returns true if the DDOP was successfully analyzed, otherwise false
+	bool initialize(std::shared_ptr<isobus::DeviceDescriptorObjectPool> ddop);
 
 	/// @brief A callback that will be used by the TC client to read values
 	/// @param[in] elementNumber The element number associated to the value being requested

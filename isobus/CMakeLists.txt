@@ -51,7 +51,8 @@ set(ISOBUS_SRC
     "can_message_data.cpp"
     "isobus_virtual_terminal_server.cpp"
     "isobus_virtual_terminal_working_set_base.cpp"
-    "isobus_virtual_terminal_server_managed_working_set.cpp")
+    "isobus_virtual_terminal_server_managed_working_set.cpp"
+    "DdopGenerator.cpp")
 
 # Prepend the source directory path to all the source files
 prepend(ISOBUS_SRC ${ISOBUS_SRC_DIR} ${ISOBUS_SRC})

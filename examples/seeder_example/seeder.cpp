@@ -25,7 +25,7 @@ bool Seeder::initialize()
 	// Automatically load the desired CAN driver based on the available drivers
 	std::shared_ptr<isobus::CANHardwarePlugin> canDriver = nullptr;
 #if defined(ISOBUS_SOCKETCAN_AVAILABLE)
-	canDriver = std::make_shared<isobus::SocketCANInterface>("vcan1");
+	canDriver = std::make_shared<isobus::SocketCANInterface>("can0");
 #elif defined(ISOBUS_WINDOWSPCANBASIC_AVAILABLE)
 	canDriver = std::make_shared<isobus::PCANBasicWindowsPlugin>(PCAN_USBBUS1);
 #elif defined(ISOBUS_WINDOWSINNOMAKERUSB2CAN_AVAILABLE)
