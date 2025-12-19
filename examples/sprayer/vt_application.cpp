@@ -19,7 +19,7 @@
 #include <cassert>
 #include <iostream>
 
-SeederVtApplication::SeederVtApplication(std::shared_ptr<isobus::PartneredControlFunction> VTPartner, std::shared_ptr<isobus::PartneredControlFunction> TCPartner, std::shared_ptr<isobus::InternalControlFunction> source) :
+SprayerVtApplication::SprayerVtApplication(std::shared_ptr<isobus::PartneredControlFunction> VTPartner, std::shared_ptr<isobus::PartneredControlFunction> TCPartner, std::shared_ptr<isobus::InternalControlFunction> source) :
   TCClientInterface(TCPartner, source, nullptr),
   VTClientInterface(std::make_shared<isobus::VirtualTerminalClient>(VTPartner, source)),
   VTClientUpdateHelper(VTClientInterface),
@@ -30,7 +30,7 @@ SeederVtApplication::SeederVtApplication(std::shared_ptr<isobus::PartneredContro
 	alarms[AlarmType::NoTaskController] = Alarm(30000); // 30 seconds, TC can take a while to connect
 }
 
-bool SeederVtApplication::initialize()
+bool SprayerVtApplication::initialize()
 {
 	objectPool = isobus::IOPFileInterface::read_iop_file("BasePool.iop");
 
@@ -125,7 +125,7 @@ bool SeederVtApplication::initialize()
 	return true;
 }
 
-void SeederVtApplication::handle_vt_key_events(const isobus::VirtualTerminalClient::VTKeyEvent &event)
+void SprayerVtApplication::handle_vt_key_events(const isobus::VirtualTerminalClient::VTKeyEvent &event)
 {
 	if (event.keyNumber == 0)
 	{
@@ -238,7 +238,7 @@ void SeederVtApplication::handle_vt_key_events(const isobus::VirtualTerminalClie
 	}
 }
 
-void SeederVtApplication::handle_numeric_value_events(const isobus::VirtualTerminalClient::VTChangeNumericValueEvent &event)
+void SprayerVtApplication::handle_numeric_value_events(const isobus::VirtualTerminalClient::VTChangeNumericValueEvent &event)
 {
 	switch (event.objectID)
 	{
@@ -287,22 +287,22 @@ void SeederVtApplication::handle_numeric_value_events(const isobus::VirtualTermi
 	}
 }
 
-void SeederVtApplication::handle_machine_selected_speed(const std::shared_ptr<isobus::SpeedMessagesInterface::MachineSelectedSpeedData> mssData, bool)
+void SprayerVtApplication::handle_machine_selected_speed(const std::shared_ptr<isobus::SpeedMessagesInterface::MachineSelectedSpeedData> mssData, bool)
 {
 	process_new_speed(SpeedSources::MachineSelected, mssData->get_machine_speed());
 }
 
-void SeederVtApplication::handle_ground_based_speed(const std::shared_ptr<isobus::SpeedMessagesInterface::GroundBasedSpeedData> gbsData, bool)
+void SprayerVtApplication::handle_ground_based_speed(const std::shared_ptr<isobus::SpeedMessagesInterface::GroundBasedSpeedData> gbsData, bool)
 {
 	process_new_speed(SpeedSources::GroundBased, gbsData->get_machine_speed());
 }
 
-void SeederVtApplication::handle_wheel_based_speed(const std::shared_ptr<isobus::SpeedMessagesInterface::WheelBasedMachineSpeedData> wbsData, bool)
+void SprayerVtApplication::handle_wheel_based_speed(const std::shared_ptr<isobus::SpeedMessagesInterface::WheelBasedMachineSpeedData> wbsData, bool)
 {
 	process_new_speed(SpeedSources::WheelBased, wbsData->get_machine_speed());
 }
 
-void SeederVtApplication::process_new_speed(SpeedSources source, std::uint32_t speed)
+void SprayerVtApplication::process_new_speed(SpeedSources source, std::uint32_t speed)
 {
 	bool shouldConsumeThisSpeed = false;
 
@@ -327,7 +327,7 @@ void SeederVtApplication::process_new_speed(SpeedSources source, std::uint32_t s
 	}
 }
 
-void SeederVtApplication::update()
+void SprayerVtApplication::update()
 {
 	// Update some polled data or other things that don't need as frequent updates
 	if (isobus::SystemTiming::time_expired_ms(slowUpdateTimestamp_ms, 1000))
@@ -387,14 +387,14 @@ void SeederVtApplication::update()
 	VTClientUpdateHelper.set_numeric_value(autoManual_ObjPtr, sectionControl.get_is_mode_auto() ? autoMode_Container : manualMode_Container);
 }
 
-void SeederVtApplication::toggle_section(std::uint8_t sectionIndex)
+void SprayerVtApplication::toggle_section(std::uint8_t sectionIndex)
 {
 	sectionControl.set_section_switch_state(sectionIndex, !sectionControl.get_section_switch_state(sectionIndex));
 	TCClientInterface.on_value_changed_trigger(2, static_cast<std::uint16_t>(isobus::DataDescriptionIndex::ActualCondensedWorkState1_16));
 	update_section_objects(sectionIndex);
 }
 
-void SeederVtApplication::update_section_objects(std::uint8_t sectionIndex)
+void SprayerVtApplication::update_section_objects(std::uint8_t sectionIndex)
 {
 	std::uint16_t newObject = offButtonSliderSmall_OutPict;
 	if (sectionControl.get_section_switch_state(sectionIndex))
@@ -469,7 +469,7 @@ void SeederVtApplication::update_section_objects(std::uint8_t sectionIndex)
 	VTClientUpdateHelper.set_attribute(statusRectangleId, 5, fillAttribute); // 5 Is the attribute ID of the fill attribute
 }
 
-void SeederVtApplication::update_speedometer_objects(std::uint32_t speed)
+void SprayerVtApplication::update_speedometer_objects(std::uint32_t speed)
 {
 	if (get_is_object_shown(currentSpeedReadout_VarNum))
 	{
@@ -505,7 +505,7 @@ void SeederVtApplication::update_speedometer_objects(std::uint32_t speed)
 	}
 }
 
-bool SeederVtApplication::get_is_object_shown(std::uint16_t objectID) const
+bool SprayerVtApplication::get_is_object_shown(std::uint16_t objectID) const
 {
 	//! TODO: add this functionality to the VTClientStateTracker
 
@@ -635,7 +635,7 @@ bool SeederVtApplication::get_is_object_shown(std::uint16_t objectID) const
 	return retVal;
 }
 
-void SeederVtApplication::revert_to_previous_data_mask()
+void SprayerVtApplication::revert_to_previous_data_mask()
 {
 	for (std::uint16_t maskId : VTClientUpdateHelper.get_mask_history())
 	{
@@ -650,7 +650,7 @@ void SeederVtApplication::revert_to_previous_data_mask()
 	VTClientUpdateHelper.set_active_data_or_alarm_mask(example_WorkingSet, mainRunscreen_DataMask);
 }
 
-void SeederVtApplication::update_ut_version_objects(isobus::VirtualTerminalClient::VTVersion version)
+void SprayerVtApplication::update_ut_version_objects(isobus::VirtualTerminalClient::VTVersion version)
 {
 	std::uint8_t integerVersion = 0xFF;
 
@@ -692,7 +692,7 @@ void SeederVtApplication::update_ut_version_objects(isobus::VirtualTerminalClien
 	VTClientUpdateHelper.set_numeric_value(utVersion_VarNum, integerVersion);
 }
 
-void SeederVtApplication::update_alarms()
+void SprayerVtApplication::update_alarms()
 {
 	if (VTClientInterface->get_is_connected() && VTClientUpdateHelper.get_numeric_value(enableAlarms_VarNum))
 	{
@@ -767,18 +767,18 @@ void SeederVtApplication::update_alarms()
 	}
 }
 
-SeederVtApplication::Alarm::Alarm(std::uint32_t activationDelay_ms) :
+SprayerVtApplication::Alarm::Alarm(std::uint32_t activationDelay_ms) :
   activationDelay_ms(activationDelay_ms)
 {
 }
 
-bool SeederVtApplication::Alarm::is_active() const
+bool SprayerVtApplication::Alarm::is_active() const
 {
 	return (!acknowledged) && (timestampTriggered_ms != 0) &&
 	  isobus::SystemTiming::time_expired_ms(timestampTriggered_ms, activationDelay_ms);
 }
 
-void SeederVtApplication::Alarm::trigger()
+void SprayerVtApplication::Alarm::trigger()
 {
 	if (timestampTriggered_ms == 0)
 	{
@@ -786,12 +786,12 @@ void SeederVtApplication::Alarm::trigger()
 	}
 }
 
-void SeederVtApplication::Alarm::acknowledge()
+void SprayerVtApplication::Alarm::acknowledge()
 {
 	acknowledged = true;
 }
 
-void SeederVtApplication::Alarm::reset()
+void SprayerVtApplication::Alarm::reset()
 {
 	timestampTriggered_ms = 0;
 	acknowledged = false;

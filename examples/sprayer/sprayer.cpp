@@ -1,12 +1,12 @@
 //================================================================================================
-/// @file seeder.cpp
+/// @file sprayer.cpp
 ///
-/// @brief This is the implementation of an example seeder application
+/// @brief This is the implementation of an example sprayer application
 /// @author Adrian Del Grosso
 ///
 /// @copyright 2023 The Open-Agriculture Developers
 //================================================================================================
-#include "seeder.hpp"
+#include "sprayer.hpp"
 
 #include "isobus/hardware_integration/available_can_drivers.hpp"
 #include "isobus/hardware_integration/can_hardware_interface.hpp"
@@ -18,7 +18,7 @@
 
 #include <iostream>
 
-bool Seeder::initialize()
+bool Sprayer::initialize()
 {
 	bool retVal = true;
 
@@ -100,13 +100,13 @@ bool Seeder::initialize()
 	diagnosticProtocol->ControlFunctionFunctionalitiesMessageInterface.set_functionality_is_supported(isobus::ControlFunctionFunctionalities::Functionalities::TaskControllerGeoClient, 1, true);
 	diagnosticProtocol->ControlFunctionFunctionalitiesMessageInterface.set_functionality_is_supported(isobus::ControlFunctionFunctionalities::Functionalities::TaskControllerSectionControlClient, 1, true);
 
-	VTApplication = std::make_unique<SeederVtApplication>(PartnerVT, PartnerTC, InternalECU);
+	VTApplication = std::make_unique<SprayerVtApplication>(PartnerVT, PartnerTC, InternalECU);
 	VTApplication->initialize();
 
 	return retVal;
 }
 
-void Seeder::terminate()
+void Sprayer::terminate()
 {
 	if (nullptr != VTApplication)
 	{
@@ -120,7 +120,7 @@ void Seeder::terminate()
 	isobus::CANHardwareInterface::stop();
 }
 
-void Seeder::update()
+void Sprayer::update()
 {
 	if (nullptr != VTApplication)
 	{

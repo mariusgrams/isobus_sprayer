@@ -20,12 +20,11 @@
 #include "isobus/isobus/isobus_virtual_terminal_client_update_helper.hpp"
 
 /// @brief A class that manages the main application logic for this example program.
-class SeederVtApplication
+class SprayerVtApplication
 {
 public:
-	/// @brief Constructor for a SeederVtApplication
-	SeederVtApplication(std::shared_ptr<isobus::PartneredControlFunction> VTPartner, std::shared_ptr<isobus::PartneredControlFunction> TCPartner, std::shared_ptr<isobus::InternalControlFunction> source);
-
+	/// @brief Constructor for a SprayerVtApplication
+	SprayerVtApplication(std::shared_ptr<isobus::PartneredControlFunction> VTPartner, std::shared_ptr<isobus::PartneredControlFunction> TCPartner, std::shared_ptr<isobus::InternalControlFunction> source);
 	/// @brief Initializes the class. Should be called before update is called the first time
 	bool initialize();
 

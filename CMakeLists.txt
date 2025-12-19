@@ -72,7 +72,7 @@ if(BUILD_EXAMPLES)
   # add_subdirectory("examples/task_controller_client")
   # add_subdirectory("examples/task_controller_server")
   # add_subdirectory("examples/guidance")
-  add_subdirectory("examples/seeder_example")
+  add_subdirectory("examples/sprayer")
 endif()
 
 if(BUILD_TESTING)

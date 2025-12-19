@@ -23,5 +23,5 @@ make -j$(nproc)
 echo "Build completed!"
 echo ""
 echo "To run the application:"
-echo "  build/examples/seeder_example"
-echo "  ./SeederExample"
+echo "  build/examples/sprayer"
+echo "  ./SprayerExample"

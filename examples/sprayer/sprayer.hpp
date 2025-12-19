@@ -1,21 +1,21 @@
 //================================================================================================
-/// @file seeder.hpp
+/// @file sprayer.hpp
 ///
-/// @brief This is the definition of an example seeder application
+/// @brief This is the definition of an example sprayer application
 /// @author Adrian Del Grosso
 ///
 /// @copyright 2023 The Open-Agriculture Developers
 //================================================================================================
-#ifndef SEEDER_HPP
-#define SEEDER_HPP
+#ifndef SPRAYER_HPP
+#define SPRAYER_HPP
 
 #include "isobus/isobus/isobus_diagnostic_protocol.hpp"
 #include "vt_application.hpp"
 
-class Seeder
+class Sprayer
 {
 public:
-	Seeder() = default;
+	Sprayer() = default;
 
 	bool initialize();
 
@@ -24,8 +24,8 @@ public:
 	void update();
 
 private:
-	std::unique_ptr<SeederVtApplication> VTApplication = nullptr;
+	std::unique_ptr<SprayerVtApplication> VTApplication = nullptr;
 	std::unique_ptr<isobus::DiagnosticProtocol> diagnosticProtocol = nullptr;
 };
 
-#endif // SEEDER_HPP
+#endif // SPRAYER_HPP

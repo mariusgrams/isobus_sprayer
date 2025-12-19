@@ -1,13 +1,13 @@
 //================================================================================================
 /// @file main.cpp
 ///
-/// @brief Defines `main` for the seeder example
+/// @brief Defines `main` for the sprayer example
 /// @details This example is meant to use all the major protocols in a more "complete" application.
 /// @author Adrian Del Grosso
 ///
 /// @copyright 2023 The Open-Agriculture Developers
 //================================================================================================
-#include "seeder.hpp"
+#include "sprayer.hpp"
 #include "isobus/isobus/isobus_virtual_terminal_working_set_base.hpp"
 #include "isobus/utility/iop_file_interface.hpp"
 
@@ -25,17 +25,17 @@ void signal_handler(int)
 int main()
 {
 	int retVal = 0;
-	Seeder seederExample;
+	Sprayer sprayerExample;
 	std::signal(SIGINT, signal_handler);
 
-	if (seederExample.initialize())
+	if (sprayerExample.initialize())
 	{
 		while (running)
 		{
-			seederExample.update();
+			sprayerExample.update();
 			std::this_thread::sleep_for(std::chrono::milliseconds(50));
 		}
-		seederExample.terminate();
+		sprayerExample.terminate();
 	}
 	else
 	{
